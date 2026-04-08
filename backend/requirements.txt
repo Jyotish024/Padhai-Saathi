@@ -4,3 +4,6 @@ pymupdf
 langchain-text-splitters
 langchain-groq
 gTTS
+gunicorn
+websockets
+python-dotenv

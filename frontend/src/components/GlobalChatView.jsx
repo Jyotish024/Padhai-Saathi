@@ -18,9 +18,13 @@ export function GlobalChatView() {
 
   useEffect(() => {
     const userName = (currentUserName || "").trim() || "Guest";
-    const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
-    const wsHost = window.location.hostname === "localhost" ? "127.0.0.1" : window.location.hostname;
-    const ws = new WebSocket(`${wsProtocol}://${wsHost}:8000/ws/chat`);
+    
+    // Determine the API URL (same as api.js)
+    const apiUrl = import.meta.env.VITE_API_URL || `${window.location.protocol}//${window.location.hostname}:8000`;
+    
+    // Convert http/https to ws/wss
+    const wsUrl = apiUrl.replace(/^http/, "ws") + "/ws/chat";
+    const ws = new WebSocket(wsUrl);
     socketRef.current = ws;
 
     ws.onopen = () => {
