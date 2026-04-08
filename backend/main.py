@@ -29,8 +29,8 @@ llm = ChatGroq(
 )
 # Using generic llama-3.1-8b as a safe high-performance fallback for LangChain since some scout models require strict permissions string.
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PDF_DIR = os.path.join(BASE_DIR, "public", "pdfs")
+BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
+PDF_DIR = os.path.join(BACKEND_DIR, "pdfs")
 
 DATA_BY_CLASS_SUBJECT = {
     "Class 10": {
