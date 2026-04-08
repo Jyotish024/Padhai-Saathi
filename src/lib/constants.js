@@ -1,0 +1,31 @@
+export const CHAPTER_TITLES = {
+  "Chapter 1": "Chemical Reactions and Equations",
+  "Chapter 2": "Acids, Bases and Salts",
+  "Chapter 3": "Metals and Non-metals",
+  "Chapter 4": "Carbon and Its Compounds",
+  "Chapter 5": "Life Processes",
+  "Chapter 6": "Control and Coordination",
+  "Chapter 7": "How Do Organisms Reproduce?",
+  "Chapter 8": "Heredity and Evolution",
+  "Chapter 9": "Light – Reflection and Refraction",
+  "Chapter 10": "The Human Eye and the Colourful World",
+  "Chapter 11": "Electricity",
+  "Chapter 12": "Magnetic Effects of Electric Current",
+  "Chapter 13": "Our Environment",
+};
+
+export const CHAPTER_STATUS_MESSAGES = {
+  "Chapter 1": "Mixing chemicals...",
+  "Chapter 2": "Measuring pH...",
+  "Chapter 3": "Checking metals...",
+  "Chapter 4": "Building molecules...",
+  "Chapter 5": "Studying cells...",
+  "Chapter 6": "Checking reflexes...",
+  "Chapter 7": "Observing growth...",
+  "Chapter 8": "Analyzing DNA...",
+  "Chapter 9": "Bending light...",
+  "Chapter 10": "Adjusting focus...",
+  "Chapter 11": "Charging circuits...",
+  "Chapter 12": "Aligning magnets...",
+  "Chapter 13": "Saving the planet...",
+};
