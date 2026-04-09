@@ -1,0 +1,11 @@
+{
+  "name": "student-helper-root",
+  "version": "1.0.0",
+  "description": "Root task runner for Student Helper project",
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "backend": "cd backend && python -m uvicorn main:app --reload",
+    "start": "npm run dev --prefix frontend & cd backend && python -m uvicorn main:app --reload",
+    "install-all": "npm install --prefix frontend && pip install -r backend/requirements.txt"
+  }
+}

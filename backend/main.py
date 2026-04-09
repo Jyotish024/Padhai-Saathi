@@ -10,6 +10,11 @@ from langchain_groq import ChatGroq
 from gtts import gTTS
 import re
 import json
+from dotenv import load_dotenv
+
+# Load .env from the same directory as this file (backend/.env)
+_env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+load_dotenv(dotenv_path=_env_path)
 
 app = FastAPI()
 
@@ -21,7 +26,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
+_groq_api_key = os.getenv("GROQ_API_KEY")
+if not _groq_api_key:
+    raise RuntimeError("GROQ_API_KEY environment variable is not set. Please add it to your .env file or environment.")
+os.environ["GROQ_API_KEY"] = _groq_api_key
 
 llm = ChatGroq(
     model_name="llama-3.3-70b-versatile",
@@ -30,7 +38,7 @@ llm = ChatGroq(
 # Using generic llama-3.1-8b as a safe high-performance fallback for LangChain since some scout models require strict permissions string.
 
 BACKEND_DIR = os.path.dirname(os.path.abspath(__file__))
-PDF_DIR = os.path.join(BACKEND_DIR, "pdfs")
+PDF_DIR = os.path.join(BACKEND_DIR, "..", "frontend", "public", "pdfs")
 
 DATA_BY_CLASS_SUBJECT = {
     "Class 10": {
@@ -220,11 +228,14 @@ def get_chapters(className: str = "Class 10", subject: str = "Science"):
     return chapters
 
 
+@app.post("/explain")
+def explain_page(req: ExplainRequest):
+    context = get_page_context(req.chapter, req.page)
+
     # Detect if it's a Hindi PDF based on the path
     pdf_path = chapters_dict.get(req.chapter, "")
     is_hindi_subject = "Hindi/" in pdf_path
-    
-    language_instruction = "Respond in Hindi." if is_hindi_subject else "Respond in English."
+
     if is_hindi_subject:
         prompt = f"""
 You are an expert Hindi school teacher.
