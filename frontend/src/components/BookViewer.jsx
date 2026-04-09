@@ -60,7 +60,28 @@ export function BookViewer() {
   }, []);
 
   useEffect(() => {
-    // Keeping this empty to preserve hooks sequence if needed, removing auto-hide logic.
+    let timeoutId;
+    const handleMouseMove = (e) => {
+      // If mouse is within bottom 150px of screen
+      if (window.innerHeight - e.clientY < 150) {
+        setIsPillVisible(true);
+        clearTimeout(timeoutId);
+      } else if (!isPillHovered) {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => setIsPillVisible(false), 2000);
+      }
+    };
+    
+    // Initial setup
+    window.addEventListener('mousemove', handleMouseMove);
+    timeoutId = setTimeout(() => {
+      if (!isPillHovered) setIsPillVisible(false);
+    }, 2000);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      clearTimeout(timeoutId);
+    };
   }, [isPillHovered]);
 
   // Reset error state when chapter or subject changes
@@ -201,14 +222,7 @@ export function BookViewer() {
                 transition={{ type: "spring", stiffness: 200, damping: 25 }}
                 className="bg-white rounded-2xl mb-[120px] shadow-xl overflow-hidden w-full flex justify-center border border-slate-100 relative group"
               >
-                  {/* Left Nav Button */}
-                  <button 
-                    onClick={handlePrev}
-                    disabled={currentPageNum <= 1}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur shadow-lg rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 disabled:opacity-0 transition-all z-10"
-                  >
-                    <ArrowLeft className="w-6 h-6" />
-                  </button>
+
 
                  <Page 
                    pageNumber={currentPageNum} 
@@ -224,14 +238,7 @@ export function BookViewer() {
                    }
                  />
 
-                  {/* Right Nav Button */}
-                  <button 
-                    onClick={handleNext}
-                    disabled={numPages ? currentPageNum >= numPages : false}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/90 backdrop-blur shadow-lg rounded-full flex items-center justify-center text-slate-700 hover:bg-slate-100 disabled:opacity-0 transition-all z-10"
-                  >
-                    <ArrowRight className="w-6 h-6" />
-                  </button>
+
               </motion.div>
             </AnimatePresence>
           </Document>
@@ -243,15 +250,15 @@ export function BookViewer() {
 
         {/* Lumina Bottom Navigation Pill */}
         <AnimatePresence>
-          {pdfUrl && (
+          {pdfUrl && isPillVisible && (
             <motion.div 
-              initial={{ y: 0 }}
+              initial={{ y: 120 }}
               animate={{ y: 0 }}
               exit={{ y: 120 }}
-              transition={{ type: "spring", stiffness: 260, damping: 25 }}
+              transition={{ type: "spring", stiffness: 150, damping: 20 }}
               onMouseEnter={() => setIsPillHovered(true)}
               onMouseLeave={() => setIsPillHovered(false)}
-              className="fixed bottom-10 left-[calc(50%-120px)] flex items-center justify-between w-[240px] bg-white backdrop-blur-xl border border-slate-100 px-6 py-3 rounded-[32px] shadow-[0_20px_40px_-5px_rgba(0,0,0,0.1)] z-50 transition-all duration-500 hover:shadow-[0_30px_60px_-10px_rgba(0,0,0,0.15)]"
+              className="fixed bottom-10 left-[calc(50%-120px)] flex items-center justify-between w-[240px] bg-white backdrop-blur-xl border border-slate-100 px-6 py-3 rounded-[32px] shadow-[0_20px_40px_-5px_rgba(0,0,0,0.1)] z-50 transition-shadow duration-500 hover:shadow-[0_30px_60px_-10px_rgba(0,0,0,0.15)]"
             >
               <button 
                 className="flex flex-col items-center gap-1.5 text-slate-600 hover:text-slate-900 transition-colors disabled:opacity-30 group"
